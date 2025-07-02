@@ -54,6 +54,35 @@ public class StudentDao {
 		}
 
 	}
+	
+	public static List<Student> getAllStudents() {
+		List<Student> students = new ArrayList<>();
+		String sql = "select * from student";
+
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				Student student = new Student(rs.getInt("rollNo"), rs.getString("firstName"), rs.getString("lastName"),
+						rs.getString("email"), rs.getString("gender"), rs.getTimestamp("addDate").toLocalDateTime(),
+						rs.getTimestamp("lastUpdate").toLocalDateTime()
+
+				);
+
+				students.add(student);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return students;
+
+	}
 
 
 }
