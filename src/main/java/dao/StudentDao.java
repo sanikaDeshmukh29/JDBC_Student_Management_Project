@@ -209,4 +209,35 @@ public class StudentDao {
 		return student;
 	}
 
+	public static List<Student> getRecordsPerPage(int limit, int offset) {
+
+		List<Student> students = new ArrayList<Student>();
+
+		String sql = "select * from student limit ? offset ?";
+
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, limit);
+			ps.setInt(2, offset);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Student student = new Student(rs.getInt("rollNo"), rs.getString("firstName"), rs.getString("lastName"),
+						rs.getString("email"), rs.getString("gender"), rs.getTimestamp("addDate").toLocalDateTime(),
+						rs.getTimestamp("lastUpdate").toLocalDateTime()
+
+				);
+
+				students.add(student);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return students;
+
+	}
+
 }
