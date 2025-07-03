@@ -144,6 +144,50 @@ public class StudentDao {
 			
 			
 		}
+	
+public static List<Student> searchStudentByName(String name){
+		
+		List<Student> students = new ArrayList<>();
+		
+		String sql = "select * from student where firstName Like ?";
+		
+		PreparedStatement ps;
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, "%" + name + "%");
+			
+			ResultSet rs = ps.executeQuery();
+			
+			Student student = null;
+			
+			while(rs.next()) {
+				student = new Student(
+						
+						rs.getInt("rollNo"),
+						rs.getString("firstName"),
+						rs.getString("lastName"),
+						rs.getString("email"),
+						rs.getString("gender"),
+						rs.getTimestamp("addDate").toLocalDateTime(),
+						rs.getTimestamp("lastUpdate").toLocalDateTime()
+						
+						);
+				
+				students.add(student);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+		
+		
+		return students;
+		
+		
+	}
 
 
 
