@@ -83,6 +83,44 @@ public class StudentDao {
 		return students;
 
 	}
+	
+	public static Student updateStudent(Student student) {
+
+		int rollNo = student.getRollNo();
+
+		if (rollNo > 0) {
+
+			String sql = "update student set firstName = ?, lastName = ?, email = ?, gender = ? where rollNo = ?";
+
+			try {
+				PreparedStatement ps = conn.prepareStatement(sql);
+
+				ps.setString(1, student.getFirstName());
+				ps.setString(2, student.getlastName());
+				ps.setString(3, student.getEmail());
+				ps.setString(4, student.getGender());
+				ps.setInt(5, rollNo);
+
+				int result = ps.executeUpdate();
+
+				if (result > 0) {
+
+					System.out.println("Student updated successfully");
+				} else {
+					System.out.println("Failed to update");
+				}
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return student;
+
+	}
+
 
 
 }
