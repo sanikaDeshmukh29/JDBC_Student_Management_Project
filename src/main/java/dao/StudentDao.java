@@ -120,6 +120,30 @@ public class StudentDao {
 		return student;
 
 	}
+	
+	public static void deleteStudent(int rollNo) {
+		
+		
+		   String sql = "delete from student where rollNo = ?";
+		   
+		  
+		   try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, rollNo);
+			
+			int result = ps.executeUpdate();
+			
+			if(result > 0) {
+				System.out.println("Student deleted successfully with roll number = "+ rollNo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Roll number not found!");
+			e.printStackTrace();
+		}
+			
+			
+		}
 
 
 
