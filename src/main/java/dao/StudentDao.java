@@ -22,8 +22,7 @@ public class StudentDao {
 
 		this.conn = conn;
 	}
-	
-	
+
 	public static void insertStudent(Student student) {
 
 		String sql = "Insert into student(firstName, lastName, email, gender) values (?,?,?,?)";
@@ -54,7 +53,7 @@ public class StudentDao {
 		}
 
 	}
-	
+
 	public static List<Student> getAllStudents() {
 		List<Student> students = new ArrayList<>();
 		String sql = "select * from student";
@@ -83,7 +82,7 @@ public class StudentDao {
 		return students;
 
 	}
-	
+
 	public static Student updateStudent(Student student) {
 
 		int rollNo = student.getRollNo();
@@ -120,76 +119,94 @@ public class StudentDao {
 		return student;
 
 	}
-	
+
 	public static void deleteStudent(int rollNo) {
-		
-		
-		   String sql = "delete from student where rollNo = ?";
-		   
-		  
-		   try {
+
+		String sql = "delete from student where rollNo = ?";
+
+		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, rollNo);
-			
+
 			int result = ps.executeUpdate();
-			
-			if(result > 0) {
-				System.out.println("Student deleted successfully with roll number = "+ rollNo);
+
+			if (result > 0) {
+				System.out.println("Student deleted successfully with roll number = " + rollNo);
 			}
-			
+
 		} catch (SQLException e) {
 			System.out.println("Roll number not found!");
 			e.printStackTrace();
 		}
-			
-			
-		}
-	
-public static List<Student> searchStudentByName(String name){
-		
+
+	}
+
+	public static List<Student> searchStudentByName(String name) {
+
 		List<Student> students = new ArrayList<>();
-		
+
 		String sql = "select * from student where firstName Like ?";
-		
+
 		PreparedStatement ps;
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, "%" + name + "%");
-			
+
 			ResultSet rs = ps.executeQuery();
-			
+
 			Student student = null;
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				student = new Student(
-						
-						rs.getInt("rollNo"),
-						rs.getString("firstName"),
-						rs.getString("lastName"),
-						rs.getString("email"),
-						rs.getString("gender"),
-						rs.getTimestamp("addDate").toLocalDateTime(),
+
+						rs.getInt("rollNo"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"),
+						rs.getString("gender"), rs.getTimestamp("addDate").toLocalDateTime(),
 						rs.getTimestamp("lastUpdate").toLocalDateTime()
-						
-						);
-				
+
+				);
+
 				students.add(student);
-				
+
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-		
-		
-		
+
 		return students;
-		
-		
+
 	}
 
+	public static Student getStudent(int rollNo) {
 
+		String sql = "select * from student where rollNo = ?";
+
+		Student student = null;
+
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, rollNo);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				student = new Student(
+
+						rs.getInt("rollNo"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"),
+						rs.getString("gender"), rs.getTimestamp("addDate").toLocalDateTime(),
+						rs.getTimestamp("lastUpdate").toLocalDateTime()
+
+				);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(String.format("Student with roll number %d not found", rollNo));
+		}
+
+		return student;
+	}
 
 }
-
